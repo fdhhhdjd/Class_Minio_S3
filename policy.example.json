@@ -1,15 +1,23 @@
 {
-   "Version": "2012-10-17",
-   "Statement": [
+  "Version": "2012-10-17",
+  "Statement": [
     {
-     "Effect": "Allow",
-     "Action": [
-      "s3:*"
-     ],
-     "Resource": [
-      "arn:aws:s3:::example/",
-      "arn:aws:s3:::example/*"
-     ]
+      "Sid": "AllowUserToWriteObjectInFolder",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:AbortMultipartUpload",
+        "s3:DeleteObject",
+        "s3:ListBucket",
+        "s3:ListMultipartUploadParts"
+      ],
+      "Resource": ["arn:aws:s3:::bucket/*"]
+    },
+    {
+      "Sid": "AllowListBucketInFolder",
+      "Effect": "Allow",
+      "Action": ["s3:GetObject"],
+      "Resource": ["arn:aws:s3:::bucket/", "arn:aws:s3:::bucket/*"]
     }
-   ]
+  ]
 }

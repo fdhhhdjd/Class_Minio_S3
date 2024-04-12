@@ -14,6 +14,15 @@ router.post(
   uploadMemory.single("image", MAX_MEDIA),
   asyncHandler(loginController.upload)
 );
+
+router.post(
+  "/putObject",
+  uploadMemory.single("image", MAX_MEDIA),
+  asyncHandler(loginController.putObject)
+);
 router.delete("/remove", asyncHandler(loginController.remove));
+
+router.get("/listObjects", asyncHandler(loginController.listObjects));
+router.get("/getFile", asyncHandler(loginController.getFile));
 
 module.exports = router;
