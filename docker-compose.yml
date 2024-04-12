@@ -2,50 +2,53 @@ version: "3.8"
 
 services:
   backend:
-      container_name: backend
-      depends_on:
-          - minio
-      restart: always
-      build:
-          context: .
-          dockerfile: ./docker/dev/Dockerfile.dev
-      environment:
-          NODE_ENV: developer
-          NODE_OPTIONS: "--max-old-space-size=512"
-      ports:
-          - "${PORT_PUBLIC}:${PORT_PRIVATE}"
-      volumes:
-          - './src:/usr/src/app/src:ro' 
-      env_file:
-          - .env
-      command: npm run dev
-      networks:
-          - class-network
-      healthcheck:
-          test: ["CMD", "sh", "-c", "curl -sSf http://${NODE_HOST}:${PORT_PRIVATE}/api/v1 > /dev/null"]
-          interval: 60s
-          timeout: 2s
-          retries: 3  
+    container_name: backend
+    depends_on:
+      - minio
+    restart: always
+    build:
+      context: .
+      dockerfile: ./docker/dev/Dockerfile.dev
+    environment:
+      NODE_ENV: developer
+      NODE_OPTIONS: "--max-old-space-size=512"
+    ports:
+      - "${PORT_PUBLIC}:${PORT_PRIVATE}"
+    volumes:
+      - "./src:/usr/src/app/src:ro"
+    env_file:
+      - .env
+    command: npm run dev
+    networks:
+      - class-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "sh",
+          "-c",
+          "curl -sSf http://${NODE_HOST}:${PORT_PRIVATE}/api/v1 > /dev/null",
+        ]
+      interval: 60s
+      timeout: 2s
+      retries: 3
   minio:
-      container_name: minio
-      image: minio/minio:latest
-      restart: always
-      volumes:
-          - minio_data:/minio-data/data
-      ports:
-          - "${S3_ADMIN_PORT}:${S3_ADMIN_PORT}"
-          - "${S3_WEB_PORT}:${S3_WEB_PORT}"
-      environment:
-          ## Username and password must have 8 characters
-          MINIO_ROOT_USER: '${S3_USERNAME}' 
-          MINIO_ROOT_PASSWORD: '${S3_PASSWORD}' 
-          MINIO_BROWSER: "${MINIO_BROWSER}"
-          #MINIO_IAM_JWKS_URL: '{"type": "HS256", "key": "${JWT_KEY}"}' ## TODO: deploy IAM user for AssumeRole
-      command: server /minio-data/data --address ":${S3_ADMIN_PORT}" --console-address ":${S3_WEB_PORT}"
-      networks:
-          - class-network
-
-   
+    container_name: minio
+    image: minio/minio:latest
+    restart: always
+    volumes:
+      - minio_data:/minio-data/data
+    ports:
+      - "${S3_ADMIN_PORT}:${S3_ADMIN_PORT}"
+      - "${S3_WEB_PORT}:${S3_WEB_PORT}"
+    environment:
+      ## Username and password must have 8 characters
+      MINIO_ROOT_USER: "${S3_USERNAME}"
+      MINIO_ROOT_PASSWORD: "${S3_PASSWORD}"
+      MINIO_BROWSER: "${MINIO_BROWSER}"
+    command: server /minio-data/data --address ":${S3_ADMIN_PORT}" --console-address ":${S3_WEB_PORT}"
+    networks:
+      - class-network
 
 ###* NETWORD GENERAL ###
 networks:
@@ -56,6 +59,3 @@ volumes:
     driver: local
   minio_data:
     driver: local
-
-
-
