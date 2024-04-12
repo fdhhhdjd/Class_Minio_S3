@@ -1,7 +1,9 @@
 //* IMPORT
 const app = require("./src/app.js");
+const dotenv = require("dotenv");
+dotenv.config();
 
-const PORT = 5000;
+const PORT = process.emv.PORT_PRIVATE;
 
 const server = app.listen(PORT, () => {
   console.info(`💸 Api backend start with http://localhost:${PORT} 🔥`);
