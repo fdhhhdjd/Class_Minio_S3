@@ -25,6 +25,11 @@ class MediaController {
       metadata: await mediaService.putObjectS3(req),
     }).send(res);
   }
+  async putObjectMultiple(req, res, ___) {
+    new SuccessResponse({
+      metadata: await mediaService.putObjectS3Multiple(req.files),
+    }).send(res);
+  }
   async remove(req, res, ___) {
     new SuccessResponse({
       metadata: await mediaService.RemoveS3(req),

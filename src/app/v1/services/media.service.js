@@ -56,6 +56,51 @@ class MediaService {
     }
   }
 
+  async putObjectS3Multiple(images) {
+    try {
+      const uploadPromises = images.map((image) =>
+        this.putObjectGeneral(image)
+      );
+      const uploadResults = await Promise.all(uploadPromises);
+      console.log("All images uploaded successfully");
+      return uploadResults;
+    } catch (error) {
+      console.error("Error uploading images:", error);
+      throw error;
+    }
+  }
+
+  async putObjectGeneral(image) {
+    try {
+      const buffer = image.buffer;
+      const mime = image.mimetype;
+      const ContentType = { ContentType: mime };
+
+      const originalFileName = image.originalname;
+      const base64EncodedFileName =
+        Buffer.from(originalFileName).toString("base64");
+      const hash = crypto
+        .createHash("md5")
+        .update(base64EncodedFileName)
+        .digest("hex");
+      const key = hash + "_" + originalFileName;
+
+      const params = {
+        Bucket: S3_BUCKET,
+        Key: key,
+        Body: buffer,
+        ...ContentType,
+      };
+
+      const data = await awsBucket.putObject(params).promise();
+      console.info(`Upload success for ${originalFileName}`);
+      return data;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      throw error;
+    }
+  }
+
   async RemoveS3(req) {
     const paramsDelete = {
       Bucket: S3_BUCKET,
