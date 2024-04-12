@@ -10,7 +10,7 @@ class MediaController {
   }
   async remove(req, res, ___) {
     new SuccessResponse({
-      metadata: await mediaService.RemoveS3(),
+      metadata: await mediaService.RemoveS3(req),
     }).send(res);
   }
 }

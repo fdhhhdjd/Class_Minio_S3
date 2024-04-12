@@ -25,9 +25,22 @@ class MediaService {
       });
     });
   }
-  async RemoveS3(data) {
-    console.log(data);
-    return data;
+  async RemoveS3(req) {
+    const paramsDelete = {
+      Bucket: S3_BUCKET,
+      Key: req?.query?.key,
+    };
+    const bucketPath = new Promise((resolve, reject) => {
+      awsBucket.deleteObject(paramsDelete, (errs, data) => {
+        if (errs) {
+          console.error("error aws delete", errs);
+          reject(errs);
+        }
+
+        resolve(data);
+      });
+    });
+    return bucketPath;
   }
 }
 
