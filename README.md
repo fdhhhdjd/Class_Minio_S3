@@ -7,7 +7,7 @@
 <a href = "mailto:nguyentientai10@gmail.com"><img src="https://img.icons8.com/fluency/48/000000/send-mass-email.png" alt="License"></a>
 </p>
 
-# Class Online: Class Minio_S3 With teacher Tai 👨‍🎓.
+# Class Online: Class Minio S3 With teacher Tai 👨‍🎓.
 
 ## Team Word: Liên hệ công việc https://profile-forme.com
 
